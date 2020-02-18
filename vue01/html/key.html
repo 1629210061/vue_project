@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>key关键字</title>
+</head>
+
+<body>
+    <div id="app">
+        Id: <input type="text" v-model="id">
+        Name: <input type="text" v-model= "name">
+        <input type="button" value="添加" @click="add">
+        <p v-for="item in list" :key = "item.id">
+            <input type="checkbox" >{{item.id}}:{{item.name}}
+        </p>
+
+    </div>
+    <script>
+
+        var app = new Vue({ 
+            el: "#app",
+            data: {
+                id:"",
+                name:"",
+                list: [
+                    { 
+                        id: 1, name:"李斯"
+                    },
+                    {
+                        id: 2, name:"刘邦"
+                    },
+                    {
+                        id: 3, name:"鲁智深"
+                    },
+                    {
+                        id: 4, name:"荆轲"
+                    },
+                ]
+            },
+            methods:{
+                add:function(){
+                    console.log(this.id);
+                    
+                    this.list.unshift({id:this.id,name:this.name})
+                }
+            }
+        })
+    </script>
+
+
+</body>
+
+</html>

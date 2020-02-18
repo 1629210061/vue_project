@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>品牌列表案例</title>
+  <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <script src="../../node_modules/vue/dist/vue.js"></script>
+  <style>
+    .card {
+      border: 1px solid #4bb7bb;
+      margin-bottom: 20px;
+    }
+
+    .card-body label {
+      margin-right: 30px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+
+    <div class="card">
+      <div class="card-header alert alert-primary">
+        添加品牌
+      </div>
+      <div class="card-body">
+        <label for="id">
+          Id:
+          <input type="text" id="id" v-model="id">
+        </label>
+        <label for="name">
+          Name:
+          <input type="text" id="name" v-model="name">
+          <input type="button" value="添加" @click="add" class="btn btn-primary">
+        </label>
+
+        <label for="serach">
+          搜索名称关键字：
+          <input type="text" id="serach" v-model="keywords">
+        </label>
+      </div>
+
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">品牌名称</th>
+          <th scope="col">添加时间</th>
+          <th scope="col">操作</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in search(keywords)" :key="item.id">
+          <th scope="row">{{item.id}}</th>
+          <td>{{item.name}}</td>
+          <td>{{item.ctime}}</td>
+          <td><a href="#" @click.prevent="del(item)">删除</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    var app = new Vue({
+      el: "#app",
+      data: {
+        id: "",
+        name: "",
+        keywords: "",
+        list: [
+          { id: 1, name: "奔驰", ctime: new Date() },
+          { id: 2, name: "宝马", ctime: new Date() }
+
+        ]
+      },
+      methods: {
+        add: function () {
+          this.list.push({ id: this.id, name: this.name, ctime: new Date() })
+        },
+        del: function (item) {
+          // indexOf()获取元素下标
+          this.list.splice(this.list.indexOf(item), 1)
+        },
+        search: function (keywords) {
+          var newList = []
+
+          // this.list.forEach(item => {
+          //   if (item.name.indexOf(keywords) != -1) {
+          //     newList.push(item)
+          //   }
+          // });
+
+          // 注意：在es6中，为字符串提供了一个新方法，叫做string.prototype.indludes('要包含的字符串'),如果包含返回ture，否则返回false
+          if(this.list.filter)
+          return newList
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
