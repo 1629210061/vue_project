@@ -15,7 +15,7 @@
 
     .card-body label {
       margin-right: 30px;
-      font-weight: bold;
+      /* font-weight: bold; */
     }
   </style>
 </head>
@@ -34,13 +34,14 @@
         </label>
         <label for="name">
           Name:
-          <input type="text" id="name" v-model="name">
+          <!--@keyup.enter="add"键盘响应时间，vue中提供了一部分的名称，如果需要其他的键，需要使用键盘码，但是键盘码难记，我们可以使用自定义按键修饰符（也就是给键盘按键起一个别名） -->
+          <input type="text" id="name" v-model="name" @keyup.f2="add" >
           <input type="button" value="添加" @click="add" class="btn btn-primary">
         </label>
 
         <label for="serach">
           搜索名称关键字：
-          <input type="text" id="serach" v-model="keywords">
+          <input type="text" id="serach" v-model="keywords" v-focus v-color="'red'">
         </label>
       </div>
 
@@ -60,7 +61,7 @@
         <tr v-for="item in search(keywords)" :key="item.id">
           <th scope="row">{{item.id}}</th>
           <td>{{item.name}}</td>
-          <td>{{item.ctime}}</td>
+          <td>{{item.ctime|dataFormat('yyyy-mm-dd hh-mm-ss')}}</td>
           <td><a href="#" @click.prevent="del(item)">删除</a></td>
         </tr>
       </tbody>
@@ -68,6 +69,79 @@
   </div>
 
   <script>
+
+    // 过滤器只能用于差值表达式与v-bind
+    // 过滤器调用时候的格式 {{name|过滤器的名称}}
+    // 过滤器调用的时候采用的是就近原则，如果私有过滤器和全局过滤器名称一致，这时候，优先调用私有过滤器
+    // 全局过滤器
+    Vue.filter('dataFormat', function (date, pattern) {
+      var dt = new Date(date)
+
+      var y = dt.getFullYear()
+      var m = dt.getMonth()
+      var d = dt.getDate()
+
+
+      if (pattern.toLowerCase() == 'yyyy-mm-dd') {
+        return `${y}-${m}-${d}`
+      } else {
+        var hh = dt.getHours()
+        var mm = dt.getMinutes()
+        var ss = dt.getSeconds()
+
+        return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
+      }
+
+    })
+
+
+    // 自定义指令,全局的
+    // 使用Vue.directive()定义全局的指令 v-focus
+    // 其中参数1为指令名称，参数2位一个对象，有一些指令相关的函数，这些函数可以在特定的阶段，执行相关的操作
+    // 在调用的时候，必须在指令前加上v-来进行调用
+    Vue.directive('focus', {
+
+      // 每当指令绑定到元素上的时候，会立即执行这个bind函数，只执行一次
+      // 注意：在每个函数中，第一个参数永远是el，表示被绑定了指令的元素，这个el参数，是一个原生的js对象
+      // 在元素岗绑定了指令的时候，还没用插入到DOM数中去，这时候，调用focus方法没有作用
+      // 因为一个元素，只有插入DOM之后，才能获得焦点
+      // 和样式相关的操作一般可以在bind中自行
+      bind: function (el) {
+
+      },
+      // inserted表示元素插入到DOM中的时候，会执行inserted函数，触发一次
+      // 和js行为有关的操作最好在inserted中去执行，防止js行为不生效
+      inserted: function (el) { 
+        el.focus()
+      },
+      // 当vNode更新的时候，会执行updated，可能会触发多次
+      updated: function () {
+      }
+    })
+
+    // 当方式使用在bind和updated的时候可以进行简写
+    // Vue.directive('focus', function(el,binding){
+
+    // })
+
+    Vue.directive('color', {
+      bind:function(el,binding){
+        console.log(binding.name);
+        console.log(binding.value);
+        console.log(binding.expression);
+        
+        
+        el.style.color = binding.value
+      }
+    })
+
+
+    // 自定义键盘码s
+    Vue.config.keyCodes = {
+      f2: 113
+    }
+
+
     var app = new Vue({
       el: "#app",
       data: {
@@ -89,20 +163,62 @@
           this.list.splice(this.list.indexOf(item), 1)
         },
         search: function (keywords) {
-          var newList = []
-
+          // 方法一：
+          // var newList = []
           // this.list.forEach(item => {
           //   if (item.name.indexOf(keywords) != -1) {
           //     newList.push(item)
           //   }
           // });
 
-          // 注意：在es6中，为字符串提供了一个新方法，叫做string.prototype.indludes('要包含的字符串'),如果包含返回ture，否则返回false
-          if(this.list.filter)
+          // 方法二：使用filter
+          var newList = this.list.filter(item => {
+            // 注意：在es6中，为字符串提供了一个新方法，叫做string.prototype.includes('要包含的字符串'),如果包含返回ture，否则返回false
+            if (item.name.includes(keywords)) {
+              return item
+            }
+
+          })
+
           return newList
         }
+      },
+
+      filters: {
+        dataFormat: function (date, pattern) {
+          var dt = new Date(date)
+
+          var y = dt.getFullYear()
+          // padStart(位数，用什么来填充)
+          var m = (dt.getMonth() + 1).toString().padStart(2, '0')
+          var d = dt.getDate().toString().padStart(2, '0')
+
+          if (pattern.toLowerCase() == 'yyyy-mm-dd') {
+            return `${y}-${m}-${d}`
+          } else {
+            var hh = dt.getHours()
+            var mm = dt.getMinutes().toString().padStart(2, '0')
+            var ss = dt.getSeconds().toString().padStart(2, '0')
+            return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
+          }
+
+        }
+      },
+      // 自定义指令 局部
+      directives: {
+        'color':{
+          bind:function(el,binding){
+            console.log(binding.value);
+            console.log(el);
+            
+            el.style.color=binding.value
+          }
+        }
       }
+
+
     })
+
   </script>
 </body>
 
