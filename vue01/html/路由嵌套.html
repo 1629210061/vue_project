@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../node_modules/vue-router/dist/vue-router.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <router-link to="/account">account</router-link>
+        <router-view></router-view>
+    </div>
+
+    <template id="acc">
+        <div>
+            <h2>这是父组件</h2>
+            <router-link to="/account/login">登录</router-link>
+            <router-link to="/account/register">注册</router-link>
+
+            <router-view></router-view>
+
+        </div>
+
+    </template>
+
+    <template id="login">
+        <h5>登录</h5>
+    </template>
+
+    <template id="register">
+        <h5>注册</h5>
+    </template>
+
+    <script>
+
+        var account = {
+            template: "#acc"
+        }
+        var login = {
+            template: "#login"
+        }
+        var register = {
+            template: "#register"
+        }
+
+        var router = new VueRouter({
+            routes: [
+
+                {
+                    path: '/account',
+                    component: account,
+                    // 子路由不需要加/,+/以根目录来匹配路由，而不管/account
+                    children: [
+                        {
+                            path:'login',
+                            component:login
+                        },
+                        {
+                            path:'register',
+                            component:register
+                        }
+                    ]
+                }
+
+
+            ],
+        })
+
+
+
+        var vm = new Vue({
+            el: '#app',
+            data: {},
+            methods: {},
+            router,
+        });
+    </script>
+</body>
+
+</html>

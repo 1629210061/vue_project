@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>路由vue-router</title>
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../node_modules/vue-router/dist/vue-router.js"></script>
+    <style>
+
+        /* .router-link-active{
+            font-weight: bold;
+            color: chartreuse;
+        } */
+        .active{
+            font-weight: bold;
+            color: chartreuse;
+        }
+    </style>
+</head>
+
+<body>
+    <div id ="app">
+        <!-- <a href="#/login">登录</a>
+        <a href="#/register">注册</a> -->
+        <!-- 默认渲染为一个a标签，可以通过tag属性更改 -->
+
+        <!-- 路由参数传递方式1 -->
+        <!-- <router-link to="/login?id=1&name=zhangsan">登录</router-link> -->
+        <!-- 路由参数传递方式2 -->
+        <router-link to="/login/12/zhangsan">登录</router-link>
+
+
+        <router-link to="/register">注册</router-link>
+        
+        <router-view></router-view>
+    </div>
+
+    <template id="login">
+        <div>
+            <h2 >登录组件</h2>
+        </div>
+        
+    </template>
+
+    <template id="register">
+        <h2>注册组件</h2>
+    </template>
+
+    <script>
+
+    var login = {
+        template:"#login",
+        created () {
+            // console.log(this.$route.query.id);
+            console.log(this.$route.params);
+            
+            
+        }
+    }
+
+    var register = {
+        template:"#register"
+    }
+
+    // 创建一个路由对象，当导入vue-router包之后，在window全局对象中，就有了一个路由的构造函数，叫做VueRouter
+    // 可以在构造函数中创建一个配置对象
+    var router = new VueRouter({
+        // route路由匹配规则
+        routes:[
+            // 属性1path：表示路由链接地址
+            // 属性2register:表示如果路由匹配到path，则调用该组件
+
+            //redirect重定向到一个新的链接
+            {path:"/",redirect: '/login'},
+            // {path:'/login',component:login},
+            // restuful接口风格参数传递
+            {path:'/login/:id/:name',component:login},
+            {path:'/register',component:register}
+
+        ],
+        linkActiveClass:'active'
+    })
+     var vm = new Vue({
+        el: '#app',
+        data: {},
+        methods: {
+           
+        },
+        // router:router=router
+        router,
+        created () {
+            // console.log(this.$route.query.id);
+            
+        }
+     });
+    </script>
+</body>
+
+</html>

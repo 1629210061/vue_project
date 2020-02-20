@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>子组件调用父组件的方法</title>
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <child @func="func"></child>
+    </div>
+
+    <template id="child">
+        <div>
+            <h2>这是子组件</h2>
+            <input type="button" value="子组件调用父组件中的方法" @click="getfunc">
+        </div>
+
+    </template>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+
+            },
+            methods: {
+                func: function (data) {
+                    alert("这是父组件的方法    "+data)
+                }
+            },
+            components: {
+                child: {
+                    template: "#child",
+                    methods: {
+                        getfunc: function () {
+                            // $emit表示触发调用的意思， 
+                            // this.$emit('方法名称','参数1','参数2'...)
+                            this.$emit('func','123')
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

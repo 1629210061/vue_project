@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>通过ref引用dom元素，从而操作dom元素</title>
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h2>这是父组件</h2>
+        <!-- 使用ref进行引用 -->
+        <input type="button" value="按钮" ref="mybtn" @click="getdom">
+        <comp1 ref="comp1"></comp1>
+    </div>
+
+    <template id="comp1">
+        <h3>子组件</h3>
+    </template>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+
+            },
+            methods: {
+                getdom: function () {
+                    console.log(this.$refs.mybtn);
+                    console.log(this.$refs.comp1.msg);
+                    this.$refs.comp1.show();
+
+
+                }
+            },
+            components: {
+                comp1: {
+                    template: "#comp1",
+                    data() {
+                        return {
+                            msg: "message"
+                        }
+                    },
+                    methods: {
+                        show: function () {
+                            console.log("子组件的show元素");
+
+                        }
+                    }
+                },
+
+            }
+        });
+    </script>
+</body>
+
+</html>

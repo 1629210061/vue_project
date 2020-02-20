@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>组件切换</title>
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <style>
+        .comp-enter,.comp-leave-to{
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        .comp-enter-active,.comp-leave-active{
+            transition: all 2s ease;
+        } 
+    </style>
+</head>
+
+<body>
+
+    <div id="app">
+        <a href="" @click.prevent="compName='login'">登录</a>
+        <a href="" @click.prevent="compName='register'">注册</a>
+        <!-- 通过mode属性，设置组件切换时候的模式，out-in表示组件先退出，再让切换的组件进入 -->
+        <transition name="comp" mode="out-in">
+            <component :is="compName"></component>
+
+        </transition>
+    </div>
+
+    <template id="login">
+        <h2>这是登录组件</h2>
+    </template>
+    <template id="register">
+        <h2>这是注册组件</h2>
+    </template>
+    <script>
+
+        Vue.component('login', {
+            template: "#login"
+        })
+
+        Vue.component('register', {
+            template: "#register"
+        })
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                flag: true,
+                compName: "login"
+            },
+            methods: {}
+        });
+    </script>
+</body>
+
+</html>
