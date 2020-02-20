@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../node_modules/animate.css/animate.css">
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.css">
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <title>使用动画钩子函数，实现半程动画</title>
+    <style>
+        .ball {
+            background-color: blueviolet;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <input type="button" value="动画" @click="isshow=!isshow">
+        <transition name="" mode="" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter" >
+            <div class="ball" v-show="isshow"></div>
+
+        </transition>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                isshow: false
+            },
+            methods: {
+                beforeEnter:function(el){
+                    // 设置小球开始动画前的起始位置
+                    el.style.transform = "translate(0,0)"
+                },
+                enter:function(el,done){
+                    // 该代码没有实际性的效果，但是如果不加将不能实现动画效果
+                    // 使用el.offsetTop会强制动画刷新
+                    el.offsetTop
+                    el.style.transform = "translate(150px,500px)"
+                    el.style.transition = "all 3s ease"
+                    // done是afterEnter函数的引用
+                    // 当只用 JavaScript 过渡的时候，在 enter 和 leave 中必须使用 done 进行回调。否则，它们将被同步调用，过渡会立即完成。
+                    done()
+
+                },
+                afterEnter:function(el){
+                    this.isshow = !this.isshow
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

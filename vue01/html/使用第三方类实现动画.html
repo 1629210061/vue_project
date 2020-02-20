@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../node_modules/animate.css/animate.css">
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.css">
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <title>第三方动画库animate</title>
+</head>
+
+<body>
+    <div id="app">
+        <input type="button" value="动画" @click="isshoow=!isshoow"> 
+        <!-- 需要加上 animated这个基本的类才能使用该动画-->
+        <!-- 使用duration来统一设置入场和离场的时长 -->
+        <transition enter-active-class="animated bounceIn" leave-active-class="animated bounceOut" :duration="50">
+            <h3 v-show="isshoow">这是一个动画</h3>
+
+        </transition>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                isshoow: false
+            },
+            methods: {
+
+            }
+        })
+    </script>
+</body>
+
+</html>

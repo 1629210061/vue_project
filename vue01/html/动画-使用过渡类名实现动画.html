@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动画，使用过渡类名实现动画</title>
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <style>
+        .v-enter,
+        .v-leave-to {
+            opacity: 0;
+            transform: translateX(150px);
+        }
+
+        .v-enter-active,
+        .v-leave-active {
+            transition: all 5s ease;
+        }
+
+        .my-enter,
+        .my-leave-to {
+            opacity: 0;
+            transform: translateY(150px);
+        }
+
+        .my-enter-active,
+        .my-leave-active {
+            transition: all 2s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <input type="button" value="动画" @click="toggle">
+        <!-- 使用transition元素，把需要被动画控制的元素包裹起来 ，transition元素是Vue官方提供的-->
+        <transition>
+            <p v-show="isshow">这是第一个动画</p>
+        </transition>
+        <br>
+        <hr>
+
+        <input type="button" value="动画" @click="isshow2=!isshow2">
+        <!-- 给 transition定义my之后，就位自己私有的动画，需要将v-改为my-  -->
+        <transition name="my">
+            <p v-show="isshow2" >这是第二个个动画</p>
+        </transition>
+
+    </div>
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                isshow: false,
+                isshow2:false
+            },
+            methods: {
+                toggle: function () {
+                    
+                    this.isshow = !this.isshow
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
